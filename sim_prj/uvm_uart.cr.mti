@@ -1,0 +1,10 @@
+G:/Project/EDA_and_Verfication/uvm_uart/sim/testbench/hello_word.sv {0 {vlog -work work -novopt -sv -nocovercells G:/Project/EDA_and_Verfication/uvm_uart/sim/testbench/hello_word.sv
+Model Technology ModelSim SE vlog 10.0c Compiler 2011.07 Jul 21 2011
+** Error: G:/Project/EDA_and_Verfication/uvm_uart/sim/testbench/hello_word.sv(1): Cannot open `include file "H:/soft/modeltech_10.0c/ovm-2.1.2/../verilog_src/ovm-2.1.2/src/uvm_pkg.sv".
+-- Compiling module hello_world_example
+-- Importing package uvm_pkg
+** Error: G:/Project/EDA_and_Verfication/uvm_uart/sim/testbench/hello_word.sv(4): Cannot open `include file "H:/soft/modeltech_10.0c/ovm-2.1.2/../verilog_src/ovm-2.1.2/src/uvm_macros.svh".
+** Error: G:/Project/EDA_and_Verfication/uvm_uart/sim/testbench/hello_word.sv(7): (vlog-2163) Macro `uvm_info is undefined.
+** Error: G:/Project/EDA_and_Verfication/uvm_uart/sim/testbench/hello_word.sv(7): near "(": syntax error, unexpected '('
+
+} {3.0 4.0 6.0 9.0} {}}
