@@ -2,6 +2,7 @@
 `define MY_DRVIER_SV
 
 `include "uvm_pkg.sv"
+`include "my_transcation.sv"
 import uvm_pkg::*;
 
 interface my_rx_if(input clk, input rst_n);
@@ -35,6 +36,8 @@ class my_driver extends uvm_driver();
   endfunction
 
   extern virtual task main_phase(uvm_phase phase);
+  extern virtual task drive_one_pk(my_transcation tr);
+  extern virtual task push_data(ref bit[] p, int length, bit[] source);  
 
 endclass
 `endif
@@ -43,25 +46,30 @@ endclass
 task my_driver::main_phase(uvm_phase phase);
   phase.raise_objection(this);
   `uvm_info("from my_driver main", "main phase is called", UVM_LOW);
-  rxif.rx_data<= 8'b0;
-  rxif.valid <= 1'b0;
-
-  while(rxif.rst_n == 1'b0)
-    @(posedge rxif.clk);
+  my_transcation tr;
 
   for(int i = 0; i < 255; i++)
   begin
-    @(posedge rxif.clk)
-    begin
-      rxif.rx_data <= $urandom_range(0, 255);
-      rxif.valid <= 1'b1;
-      `uvm_info("from my_driver", "data direved", UVM_LOW);
-      $display(i);
-    end
+    tr = new ("tr");
+    assert(tr.randomize() with {pload.size == 160});
+    drive_one_pk(tr);
   end
-
-  @(posedge rxif.clk)
-    rxif.rx_data<= 1'b0;
-
   phase.drop_objection(this);
+endtask
+
+task my_driver::push_data(ref bit[] p_target, int length, bit[] source);
+  for(int i = 0; i < (length>>3); i++)
+  begin
+    p_target.push_back(source[7:0]);
+    source = source >> 8;
+  end
+endtask
+
+task my_driver::drive_one_pk(my_transcation tr);
+  bit [47:0] tmp;
+  bit [7:0] data_q[$];
+
+  push_data(data_q, 48, tr.dmac);
+
+
 endtask
