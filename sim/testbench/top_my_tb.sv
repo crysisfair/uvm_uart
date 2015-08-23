@@ -14,10 +14,11 @@ module top_tb;
   
   initial
   begin
-    my_driver driver;
-    driver = new ("drv", null);
-    driver.main_phase(null);
-    $finish();
+    // my_driver driver;
+    // driver = new ("drv", null);
+    // driver.main_phase(null);
+    //$finish();
+    run_test("my_driver");
   end
   
   always #10 clk <= ~clk;
