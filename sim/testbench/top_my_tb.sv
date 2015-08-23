@@ -10,7 +10,8 @@ module top_tb;
   wire [7:0] txd;
   wire tx_en;
   
-  dut u1(clk, rst_n, rxd, rx_dv, txd, tx_en);
+  my_rx_if in_if(clk, rst_n);
+  dut u1(clk, rst_n, in_if.rx_data, in_if.valid, txd, tx_en);
   
   initial
   begin
@@ -19,6 +20,11 @@ module top_tb;
     // driver.main_phase(null);
     //$finish();
     run_test("my_driver");
+  end
+
+  initial
+  begin
+    uvm_config_db#(virtual my_rx_if)::set(null, "uvm_test_top", "rxif", in_if);
   end
   
   always #10 clk <= ~clk;
