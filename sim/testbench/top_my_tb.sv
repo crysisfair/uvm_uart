@@ -1,6 +1,7 @@
 `include "uvm_macros.svh"
-
 import uvm_pkg::*;
+
+`include "my_transcation.sv"
 `include "my_driver.sv"
 
 module top_tb;

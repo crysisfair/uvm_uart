@@ -1,5 +1,8 @@
 `ifndef _MY_TRANSCATION
 `define _MY_TRANSCATION
+
+import uvm_pkg::*;
+
 class my_trans extends uvm_sequence_item;
   rand bit[47:0]  dmac;
   rand bit[47:0]  smac;
@@ -22,7 +25,7 @@ class my_trans extends uvm_sequence_item;
 
   `uvm_object_utils(my_trans);
 
-  function new(string name = "my_trans_demo"):
+  function new(string name = "my_trans_demo");
     super.new(name);
   endfunction
 
