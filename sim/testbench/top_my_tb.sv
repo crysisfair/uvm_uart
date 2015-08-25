@@ -3,6 +3,7 @@ import uvm_pkg::*;
 
 `include "my_transcation.sv"
 `include "my_driver.sv"
+`include "my_monitor.sv"
 `include "my_env.sv"
 
 module top_tb;
@@ -13,7 +14,8 @@ module top_tb;
   wire tx_en;
   
   my_rx_if in_if(clk, rst_n);
-  dut u1(clk, rst_n, in_if.rx_data, in_if.valid, txd, tx_en);
+  my_rx_if out_if(clk, rst_n);
+  dut u1(clk, rst_n, in_if.rx_data, in_if.valid, out_if.rx_data, out_if.valid);
   
   initial
   begin
@@ -23,6 +25,8 @@ module top_tb;
   initial
   begin
     uvm_config_db#(virtual my_rx_if)::set(null, "uvm_test_top.drv", "rxif", in_if);
+    uvm_config_db#(virtual my_rx_if)::set(null, "uvm_test_top.im", "vif", in_if);
+    uvm_config_db#(virtual my_rx_if)::set(null, "uvm_test_top.om", "vif", out_if);
   end
   
   always #10 clk <= ~clk;

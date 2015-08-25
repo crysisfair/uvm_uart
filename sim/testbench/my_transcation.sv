@@ -29,7 +29,7 @@ class my_trans extends uvm_sequence_item;
     super.new(name);
   endfunction
 
-  function print();
+  function void print();
     $display("dmac = %0h", dmac);
     $display("smac = %0h", smac);
     $display("ether_type %0h", ether_type);
