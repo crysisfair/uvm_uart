@@ -39,5 +39,21 @@ class my_trans extends uvm_sequence_item;
     end
   endfunction
 
+  function copy(my_trans tr);
+    if(tr == null)
+    begin
+      `uvm_fatal("from trans copy", "param tr cannot be null");
+    end
+
+    dmac = tr.dmac;
+    smac = tr.smac;
+    pload = new [tr.pload.size()];
+    for(int i = 0; i < pload.size(); i++)
+    begin
+      pload[i] = tr.pload[i];
+    end
+    crc = tr.crc;
+  endfunction
+
 endclass
 `endif
