@@ -29,5 +29,15 @@ class my_trans extends uvm_sequence_item;
     super.new(name);
   endfunction
 
+  function print();
+    $display("dmac = %0h", dmac);
+    $display("smac = %0h", smac);
+    $display("ether_type %0h", ether_type);
+    for(int i = 0; i < pload.size; i++)
+    begin
+      $display("pload[%0h] = %0h", i, pload[i]);
+    end
+  endfunction
+
 endclass
 `endif

@@ -3,6 +3,7 @@ import uvm_pkg::*;
 
 `include "my_transcation.sv"
 `include "my_driver.sv"
+`include "my_env.sv"
 
 module top_tb;
 
@@ -16,16 +17,12 @@ module top_tb;
   
   initial
   begin
-    // my_driver driver;
-    // driver = new ("drv", null);
-    // driver.main_phase(null);
-    //$finish();
-    run_test("my_driver");
+    run_test("my_env");
   end
 
   initial
   begin
-    uvm_config_db#(virtual my_rx_if)::set(null, "uvm_test_top", "rxif", in_if);
+    uvm_config_db#(virtual my_rx_if)::set(null, "uvm_test_top.drv", "rxif", in_if);
   end
   
   always #10 clk <= ~clk;

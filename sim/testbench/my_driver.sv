@@ -13,7 +13,7 @@ interface my_tx_if(input clk, input rst_n);
   logic enable;
 endinterface
 
-class my_driver extends uvm_driver();
+class my_driver extends uvm_driver;
 
   virtual my_rx_if rxif;
   `uvm_component_utils(my_driver);
