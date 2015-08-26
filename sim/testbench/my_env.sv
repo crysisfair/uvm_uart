@@ -5,8 +5,11 @@ class my_env extends uvm_env;
 	my_agent i_ag;
 	my_agent o_ag;
 	my_model mdl;
+	my_score score;
 
 	uvm_tlm_analysis_fifo #(my_trans) agt_mdl_fifo;
+	uvm_tlm_analysis_fifo #(my_trans) agt_scb_fifo;
+	uvm_tlm_analysis_fifo #(my_trans) mdl_scb_fifo;
 
 	`uvm_component_utils(my_env);
 
@@ -23,12 +26,22 @@ class my_env extends uvm_env;
 
 		mdl = my_model::type_id::create("mdl", this);
 		agt_mdl_fifo = new("agt_mdl_fifo", this);
+
+		score = my_score::type_id::create("score", this);
+		agt_scb_fifo = new("agt_scb_fifo", this);
+		mdl_scb_fifo = new("mdl_scb_fifo", this);
 	endfunction
 
 	function void connect_phase(uvm_phase phase);
 		super.connect_phase(phase);
 		i_ag.ap.connect(agt_mdl_fifo.analysis_export);
 		mdl.port.connect(agt_mdl_fifo.blocking_get_export);
+
+		mdl.ap.connect(mdl_scb_fifo.analysis_export);
+		score.exp_port.connect(mdl_scb_fifo.blocking_get_export);
+
+		o_ag.ap.connect(agt_scb_fifo.analysis_export);
+		score.act_port.connect(agt_scb_fifo.blocking_get_export);
 	endfunction
 endclass
 

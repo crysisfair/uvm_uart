@@ -48,7 +48,7 @@ task my_driver::main_phase(uvm_phase phase);
   rxif.rx_data <= 8'b0;
   rxif.valid <= 1'b0;
 
-  for(int i = 0; i < 255; i++)
+  for(int i = 0; i < 10; i++)
   begin
     tr = new ("tr");
     assert(tr.randomize() with { pload.size == 160; });

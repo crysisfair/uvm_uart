@@ -3,6 +3,7 @@
 
 class my_monitor extends uvm_monitor;
 	virtual my_rx_if vif;
+	uvm_analysis_port #(my_trans) ap;
 
 	`uvm_component_utils(my_monitor);
 
@@ -18,7 +19,12 @@ class my_monitor extends uvm_monitor;
 		begin
 			`uvm_fatal("from my monitor", "rx interface must be set");
 		end
+		ap = new("ap", this);// analysis_port must be new in build_phase, or it can be accessed directly from env
 	endfunction
+
+	function void connect_phase(uvm_phase phase);
+		super.connect_phase(phase);
+	endfunction : connect_phase
 
 	extern virtual task main_phase(uvm_phase phase);
 	extern virtual task collect_one_pkt(my_trans tr);
@@ -44,7 +50,7 @@ task my_monitor::collect_one_pkt(my_trans tr);
 		if(vif.valid) break;
 	end
 
-	`uvm_info("from monitor", "start get trans", UVM_LOW);
+	//`uvm_info("from monitor", "start get trans", UVM_LOW);
 
 	while(vif.valid)
 	begin
@@ -74,7 +80,7 @@ task my_monitor::collect_one_pkt(my_trans tr);
    for(int i = 0; i < 4; i++) begin
       tr.crc = {tr.crc[23:0], data_q.pop_front()};
    end
-   `uvm_info("my_monitor", "end collect one pkt, print it:", UVM_LOW);
+   `uvm_info("my_monitor", "end collect one pkt", UVM_LOW);
     //tr.print();
 
 endtask

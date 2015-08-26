@@ -10,7 +10,7 @@ class my_agent extends uvm_agent;
 	my_driver drv;
 	my_monitor m;
 
-	uvm_analysis_port #(my_trans) ap;
+	uvm_analysis_port #(my_trans) ap; // this analysis_port is just a pointer to port of monitor, and donnot need initialise
 
 	virtual function void build_phase(uvm_phase phase);
 		super.build_phase(phase);
@@ -19,11 +19,11 @@ class my_agent extends uvm_agent;
 			drv = my_driver::type_id::create("drv", this);
 		end
 		m = my_monitor::type_id::create("m", this);
-		ap = new("ap", this);
 	endfunction
 
 	virtual function void connect_phase(uvm_phase phase);
 		super.connect_phase(phase);
+		ap = m.ap;
 	endfunction
 
 endclass
