@@ -75,7 +75,7 @@ task my_monitor::collect_one_pkt(my_trans tr);
       tr.crc = {tr.crc[23:0], data_q.pop_front()};
    end
    `uvm_info("my_monitor", "end collect one pkt, print it:", UVM_LOW);
-    tr.print();
+    //tr.print();
 
 endtask
 
