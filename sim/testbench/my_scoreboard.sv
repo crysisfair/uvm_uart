@@ -10,6 +10,7 @@ class my_score extends uvm_scoreboard;
 
 	function  new(string name = "my scoreboard demo", uvm_component parent = null);
 		super.new(name, parent);
+		`uvm_info("from my score", "score new is called", UVM_LOW);
 	endfunction :  new
 
 	virtual function void build_phase(uvm_phase phase);
@@ -22,13 +23,12 @@ class my_score extends uvm_scoreboard;
 		my_trans get_expect, get_actual, tmp_trans;
 		bit result;
 
+		super.main_phase(phase);
+		`uvm_info("from my score", "score main phase is called", UVM_LOW);
 		fork
 			while(1)
 			begin
 				exp_port.get(get_expect);
-			end
-			while(1)
-			begin
 				exp_queue.push_back(get_expect);
 			end
 			while(1)
@@ -53,7 +53,7 @@ class my_score extends uvm_scoreboard;
 				end
 			end
 		join
-	endtask
+	endtask : main_phase
 endclass : my_score
 
 `endif

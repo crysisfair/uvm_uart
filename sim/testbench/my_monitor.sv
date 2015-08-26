@@ -22,10 +22,6 @@ class my_monitor extends uvm_monitor;
 		ap = new("ap", this);// analysis_port must be new in build_phase, or it can be accessed directly from env
 	endfunction
 
-	function void connect_phase(uvm_phase phase);
-		super.connect_phase(phase);
-	endfunction : connect_phase
-
 	extern virtual task main_phase(uvm_phase phase);
 	extern virtual task collect_one_pkt(my_trans tr);
 
@@ -37,6 +33,7 @@ task my_monitor::main_phase(uvm_phase phase);
 	begin
 		tr = new ("tr");
 		collect_one_pkt(tr);
+		ap.write(tr);
 	end
 endtask
 

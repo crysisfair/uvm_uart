@@ -55,5 +55,27 @@ class my_trans extends uvm_sequence_item;
     crc = tr.crc;
   endfunction
 
+  function bit compare(my_trans tr);
+    bit result;
+
+    if(tr == null)
+    begin
+      `uvm_fatal("from trans", "null trans!");
+    end
+    result = ((dmac == tr.dmac) &&
+                (smac == tr.smac) &&
+                (ether_type == tr.ether_type) &&
+                (crc == tr.crc));
+      if(pload.size() != tr.pload.size())
+         result = 0;
+      else 
+         for(int i = 0; i < pload.size(); i++) begin
+            if(pload[i] != tr.pload[i])
+               result = 0;
+         end
+      return result; 
+
+  endfunction : compare
+
 endclass
 `endif
