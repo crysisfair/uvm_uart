@@ -2,6 +2,8 @@
 import uvm_pkg::*;
 
 `include "my_transcation.sv"
+`include "my_sequence.sv"
+`include "my_sequencer.sv"
 `include "my_driver.sv"
 `include "my_monitor.sv"
 `include "my_agent.sv"

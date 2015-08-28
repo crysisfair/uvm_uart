@@ -13,7 +13,7 @@ interface my_tx_if(input clk, input rst_n);
   logic enable;
 endinterface
 
-class my_driver extends uvm_driver;
+class my_driver extends uvm_driver #(my_trans);
 
   virtual my_rx_if rxif;
   `uvm_component_utils(my_driver);
@@ -42,21 +42,19 @@ endclass
 
 task my_driver::main_phase(uvm_phase phase);
   my_trans tr;
-  phase.raise_objection(this);
-  `uvm_info("from my_driver main", "main phase is called", UVM_LOW);
 
   rxif.rx_data <= 8'b0;
   rxif.valid <= 1'b0;
 
-  for(int i = 0; i < 10; i++)
-  begin
-    tr = new ("tr");
-    assert(tr.randomize() with { pload.size == 160; });
-    drive_one_pk(tr);
-  end
+  while(~rxif.rst_n)
+    @(posedge rxif.clk);
 
-  repeat(5) @(posedge rxif.clk);
-  phase.drop_objection(this);
+  while(1)
+  begin
+    seq_item_port.get_next_item(req);
+    drive_one_pk(req);
+    seq_item_port.item_done();
+  end
 
 endtask
 

@@ -9,6 +9,7 @@ class my_agent extends uvm_agent;
 
 	my_driver drv;
 	my_monitor m;
+	my_sequencer sqr;
 
 	uvm_analysis_port #(my_trans) ap; // this analysis_port is just a pointer to port of monitor, and donnot need initialise
 
@@ -17,12 +18,17 @@ class my_agent extends uvm_agent;
 		if(is_active == UVM_ACTIVE)
 		begin
 			drv = my_driver::type_id::create("drv", this);
+			sqr = my_sequencer::type_id::create("sqr", this);
 		end
 		m = my_monitor::type_id::create("m", this);
 	endfunction
 
 	virtual function void connect_phase(uvm_phase phase);
 		super.connect_phase(phase);
+		if(is_active == UVM_ACTIVE)
+		begin
+			drv.seq_item_port.connect(sqr.seq_item_export);
+		end
 		ap = m.ap;
 	endfunction
 

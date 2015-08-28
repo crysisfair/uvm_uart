@@ -42,6 +42,15 @@ class my_env extends uvm_env;
 		score.act_port.connect(agt_scb_fifo.blocking_get_export);
 		`uvm_info("from my env", "my enc connect phase is called", UVM_LOW);
 	endfunction
+
+	extern virtual task main_phase(uvm_phase phase);
 endclass
 
+task my_env::main_phase(uvm_phase phase);
+	my_sequence seq;
+	phase.raise_objection(this);
+	seq = my_sequence::type_id::create("seq");
+	seq.start(i_ag.sqr);
+	phase.drop_objection(this);
+endtask : main_phase
 `endif
