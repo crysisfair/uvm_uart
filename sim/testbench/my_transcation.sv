@@ -15,6 +15,15 @@ class my_trans extends uvm_sequence_item;
     pload.size <= 1500;
   };
 
+  `uvm_object_utils_begin(my_trans)
+    `uvm_field_int(dmac, UVM_ALL_ON)
+    `uvm_field_int(smac, UVM_ALL_ON)
+    `uvm_field_int(ether_type, UVM_ALL_ON)
+    `uvm_field_array_int(pload, UVM_ALL_ON)
+    `uvm_field_int(crc, UVM_ALL_ON)
+  `uvm_object_utils_end
+
+
   function bit[31:0] calc_crc();
     return 32'h1234_5678_9098_7654;
   endfunction
@@ -23,13 +32,11 @@ class my_trans extends uvm_sequence_item;
     crc = calc_crc();
   endfunction
 
-  `uvm_object_utils(my_trans);
-
   function new(string name = "my_trans_demo");
     super.new(name);
   endfunction
 
-  function void print();
+  function void my_print();
     $display("dmac = %0h", dmac);
     $display("smac = %0h", smac);
     $display("ether_type %0h", ether_type);
@@ -39,7 +46,7 @@ class my_trans extends uvm_sequence_item;
     end
   endfunction
 
-  function copy(my_trans tr);
+  function my_copy(my_trans tr);
     if(tr == null)
     begin
       `uvm_fatal("from trans copy", "param tr cannot be null");
@@ -55,7 +62,7 @@ class my_trans extends uvm_sequence_item;
     crc = tr.crc;
   endfunction
 
-  function bit compare(my_trans tr);
+  function bit my_compare(my_trans tr);
     bit result;
 
     if(tr == null)
@@ -75,7 +82,7 @@ class my_trans extends uvm_sequence_item;
          end
       return result; 
 
-  endfunction : compare
+  endfunction : my_compare
 
 endclass
 `endif

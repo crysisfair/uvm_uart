@@ -61,48 +61,19 @@ task my_driver::main_phase(uvm_phase phase);
 endtask
 
 task my_driver::drive_one_pk(my_trans tr);
-  bit [47:0] tmp_data;
-  bit [7:0] data_q[$]; 
-  
-  //push dmac to data_q
-  tmp_data = tr.dmac;
-  for(int i = 0; i < 6; i++) begin
-     data_q.push_back(tmp_data[7:0]);
-     tmp_data = (tmp_data >> 8);
-  end
+  byte unsigned data_q[];
+  int data_size;
 
-  //push smac to data_q
-  tmp_data = tr.smac;
-  for(int i = 0; i < 6; i++) begin
-     data_q.push_back(tmp_data[7:0]);
-     tmp_data = (tmp_data >> 8);
-  end
-
-  //push ether_type to data_q
-  tmp_data = tr.ether_type;
-  for(int i = 0; i < 2; i++) begin
-     data_q.push_back(tmp_data[7:0]);
-     tmp_data = (tmp_data >> 8);
-  end
-
-  //push payload to data_q
-  for(int i = 0; i < tr.pload.size; i++) begin
-     data_q.push_back(tr.pload[i]);
-  end
-
-  //push crc to data_q
-  tmp_data = tr.crc;
-  for(int i = 0; i < 4; i++) begin
-     data_q.push_back(tmp_data[7:0]);
-     tmp_data = (tmp_data >> 8);
-  end
-  `uvm_info("my_driver", "begin to drive one pkt", UVM_LOW);
+  data_size = tr.pack_bytes(data_q) / 8;
+  $display("drv trans data_size  %d", data_size);
   repeat(3) @(posedge rxif.clk);
-   while(data_q.size() > 0) begin
-     @(posedge rxif.clk);
-     rxif.valid <= 1'b1;
-     rxif.rx_data <= data_q.pop_front(); 
+  for(int i = 0; i < data_size; i++)
+  begin
+    @(posedge rxif.clk);
+    rxif.valid <= 1'b1;
+    rxif.rx_data <= data_q[i];
   end
+
   @(posedge rxif.clk);
   rxif.valid <= 1'b0;
   `uvm_info("my_driver", "end drive one pkt", UVM_LOW);
