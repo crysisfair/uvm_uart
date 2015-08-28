@@ -32,5 +32,10 @@ class my_agent extends uvm_agent;
 		ap = m.ap;
 	endfunction
 
+	virtual task main_phase(uvm_phase phase);
+		super.main_phase(phase);
+		if(is_active) m.is_input_monitor = 1;
+	endtask : main_phase
+
 endclass
 `endif

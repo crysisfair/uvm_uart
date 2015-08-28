@@ -4,12 +4,12 @@
 class my_monitor extends uvm_monitor;
 	virtual my_rx_if vif;
 	uvm_analysis_port #(my_trans) ap;
+	bit is_input_monitor = 0;
 
 	`uvm_component_utils(my_monitor);
 
 	function new(string name = "my monitor demo", uvm_component parent = null);
 		super.new(name, parent);
-
 	endfunction
 
 	virtual function void build_phase(uvm_phase phase);
@@ -49,7 +49,7 @@ task my_monitor::collect_one_pkt(my_trans tr);
 		@(posedge vif.clk)
 		if(vif.valid) break;
 	end
-	
+
 	while(vif.valid)
 	begin
 		data_q.push_back(vif.rx_data);
@@ -61,11 +61,25 @@ task my_monitor::collect_one_pkt(my_trans tr);
 	begin
 		data_array[i] = data_q[i];
 	end
-	$display("data_size %d", data_size);
+	if(is_input_monitor)
+	begin
+		$display("input monitor, data_size %d", data_size);
+	end
+	else
+	begin
+		$display("output monitor, data_size %d", data_size);
+	end
 	tr.pload = new[data_size - 18];
 	data_size = tr.unpack_bytes(data_array) / 8;
-	`uvm_info("my_monitor", "end collect one pkt", UVM_LOW);
     //tr.print();
+	if(is_input_monitor)
+	begin
+		`uvm_info("input monitor", "end collect one pkt", UVM_LOW);
+	end
+	else
+	begin
+		`uvm_info("output monitor", "end collect one pkt", UVM_LOW);
+	end
 
 endtask
 

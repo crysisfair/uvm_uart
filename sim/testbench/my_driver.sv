@@ -51,9 +51,14 @@ task my_driver::main_phase(uvm_phase phase);
 
   while(1)
   begin
-    seq_item_port.get_next_item(req);
-    drive_one_pk(req);
-    seq_item_port.item_done();
+    seq_item_port.try_next_item(req);
+    if(req == null)
+      @(posedge rxif.clk);
+    else
+    begin
+      drive_one_pk(req);
+      seq_item_port.item_done();
+    end
   end
 
 endtask
