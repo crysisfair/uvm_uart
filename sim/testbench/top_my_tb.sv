@@ -10,6 +10,7 @@ import uvm_pkg::*;
 `include "my_model.sv"
 `include "my_scoreboard.sv"
 `include "my_env.sv"
+`include "base_test.sv"
 
 module top_tb;
 
@@ -24,14 +25,14 @@ module top_tb;
   
   initial
   begin
-    run_test("my_env");
+    run_test("base_test");
   end
 
   initial
   begin
-    uvm_config_db#(virtual my_rx_if)::set(null, "uvm_test_top.i_ag.drv", "rxif", in_if);
-    uvm_config_db#(virtual my_rx_if)::set(null, "uvm_test_top.i_ag.m", "vif", in_if);
-    uvm_config_db#(virtual my_rx_if)::set(null, "uvm_test_top.o_ag.m", "vif", out_if);
+    uvm_config_db#(virtual my_rx_if)::set(null, "uvm_test_top.env.i_ag.drv", "rxif", in_if);
+    uvm_config_db#(virtual my_rx_if)::set(null, "uvm_test_top.env.i_ag.m", "vif", in_if);
+    uvm_config_db#(virtual my_rx_if)::set(null, "uvm_test_top.env.o_ag.m", "vif", out_if);
   end
   
   always #10 clk <= ~clk;

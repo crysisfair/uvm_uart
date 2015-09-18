@@ -18,4 +18,10 @@ module dut(clk, rst_n, rxd, rx_dv, txd, tx_en);
       tx_en = rx_dv;
     end
   end
+
+  property trans;
+    @(posedge clk) (rx_dv == 1'b1) |=> (tx_en == 1'b1);
+  endproperty
+
+  test_assert : assert property (trans);
 endmodule

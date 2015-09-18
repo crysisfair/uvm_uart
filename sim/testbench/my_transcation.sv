@@ -8,11 +8,11 @@ class my_trans extends uvm_sequence_item;
   rand bit[47:0]  smac;
   rand bit[15:0]  ether_type;
   rand byte       pload[];
-  rand bit[31:0]  crc;
+  randc bit[31:0]  crc;
+  bit [7:0] sizes [2:0] = {8'd150, 8'd160, 8'd170};
 
   constraint pload_cons {
-    pload.size >= 46;
-    pload.size <= 1500;
+    pload.size() inside { sizes };
   };
 
   `uvm_object_utils_begin(my_trans)
