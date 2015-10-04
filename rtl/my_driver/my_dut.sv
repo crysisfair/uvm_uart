@@ -9,13 +9,13 @@ module dut(clk, rst_n, rxd, rx_dv, txd, tx_en);
   begin
     if(~rst_n)
     begin
-      txd = 8'b0;
-      tx_en = 1'b0;
+      txd <= 8'b0;
+      tx_en <= 1'b0;
     end
     else
     begin
-      txd = rxd;
-      tx_en = rx_dv;
+      txd <= rxd;
+      tx_en <= rx_dv;
     end
   end
 
@@ -23,5 +23,10 @@ module dut(clk, rst_n, rxd, rx_dv, txd, tx_en);
     @(posedge clk) (rx_dv == 1'b1) |=> (tx_en == 1'b1);
   endproperty
 
-  test_assert : assert property (trans);
+  property datas;
+    @(posedge clk) (rx_dv == 1'b1) |=> (txd == rxd);
+  endproperty
+
+  test_trans  : assert property (trans);
+  test_data   : assert property (datas);
 endmodule

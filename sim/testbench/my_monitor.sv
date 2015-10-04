@@ -19,7 +19,7 @@ class my_monitor extends uvm_monitor;
 		begin
 			`uvm_fatal("from my monitor", "rx interface must be set");
 		end
-		ap = new("ap", this);// analysis_port must be new in build_phase, or it can be accessed directly from env
+		ap = new("ap", this);// analysis_port must be new in build_phase, or it cannot be accessed directly from env
 	endfunction
 
 	extern virtual task main_phase(uvm_phase phase);
@@ -52,8 +52,8 @@ task my_monitor::collect_one_pkt(my_trans tr);
 
 	while(vif.valid)
 	begin
-		data_q.push_back(vif.rx_data);
 		@(posedge vif.clk);
+		data_q.push_back(vif.rx_data);
 	end
 	data_size = data_q.size();
 	data_array = new[data_size];
