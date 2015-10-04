@@ -1,4 +1,5 @@
 work
 *.wlf
 *.bak
+sim_prj
 .exvim.uvm_prj
